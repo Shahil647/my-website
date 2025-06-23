@@ -1,22 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My First Website</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KonnectBPO - Business Solutions</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f0f0;
-      text-align: center;
-      padding: 50px;
-    }
-    h1 {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
       color: #333;
+    }
+    header {
+      background: #0057b8;
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    nav {
+      background: #003d80;
+      padding: 10px 0;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    section {
+      padding: 60px 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .service-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      flex: 1 1 250px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    footer {
+      background: #003d80;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
     }
   </style>
 </head>
 <body>
-  <h1>Welcome to My Website</h1>
-  <p>This site was created using GitHub Pages.</p>
+  <header>
+    <h1>KonnectBPO</h1>
+    <p>Smart Business Process Outsourcing Solutions</p>
+  </header>
+
+  <nav>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <section id="about">
+    <h2>About Us</h2>
+    <p>
+      KonnectBPO helps businesses streamline operations and improve customer experience with cost-effective outsourcing services. Our mission is to deliver measurable results and long-term partnerships.
+    </p>
+  </section>
+
+  <section id="services">
+    <h2>Our Services</h2>
+    <div class="services">
+      <div class="service-box">
+        <h3>Customer Support</h3>
+        <p>24/7 support with multilingual capabilities via phone, email, and chat.</p>
+      </div>
+      <div class="service-box">
+        <h3>Data Entry</h3>
+        <p>Accurate and fast data entry for finance, HR, and CRM systems.</p>
+      </div>
+      <div class="service-box">
+        <h3>Back Office</h3>
+        <p>Billing, processing, and administrative services tailored to your needs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p>Email: info@konnectbpo.com</p>
+    <p>Phone: +94 77 123 4567</p>
+    <p>Address: 123 Business Park, Colombo, Sri Lanka</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 KonnectBPO. All rights reserved.</p>
+  </footer>
 </body>
 </html>
