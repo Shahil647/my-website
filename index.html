@@ -52,6 +52,27 @@
       text-align: center;
       padding: 20px 0;
     }
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+
+    body.dark-mode header,
+    body.dark-mode nav,
+    body.dark-mode footer {
+      background-color: #1e1e1e;
+      color: white;
+    }
+
+    body.dark-mode nav a {
+      color: #ccc;
+    }
+
+    body.dark-mode .service-box {
+      background-color: #2a2a2a;
+      color: white;
+    }
+
   </style>
 </head>
 <body>
@@ -65,6 +86,11 @@
     <a href="#services">Services</a>
     <a href="#contact">Contact</a>
   </nav>
+  
+  <!-- 🌙 Dark Mode Toggle Button -->
+  <div style="text-align: center; margin-top: 20px;">
+    <button id="toggle-theme">Switch to Dark Mode</button>
+  </div>
 
   <section id="about">
     <h2>About Us</h2>
@@ -72,6 +98,32 @@
       KonnectBPO helps businesses streamline operations and improve customer experience with cost-effective outsourcing services. Our mission is to deliver measurable results and long-term partnerships.
     </p>
   </section>
+  
+  <script>
+    const toggleButton = document.getElementById('toggle-theme');
+    const body = document.body;
+
+    // Load saved theme on page load
+    if (localStorage.getItem('theme') === 'dark') {
+      body.classList.add('dark-mode');
+      toggleButton.textContent = 'Switch to Light Mode';
+   }
+
+    // Toggle dark mode on button click
+    toggleButton.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+
+      if (body.classList.contains('dark-mode')) {
+       toggleButton.textContent = 'Switch to Light Mode';
+       localStorage.setItem('theme', 'dark');
+      } else {
+       toggleButton.textContent = 'Switch to Dark Mode';
+       localStorage.setItem('theme', 'light');
+      }
+    });
+  </script>
+  </body>
+  </html>
 
   <section id="services">
     <h2>Our Services</h2>
