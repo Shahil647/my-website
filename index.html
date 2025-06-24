@@ -3,127 +3,222 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard - KonnectBPO</title>
+  <title>KonnectBPO - Business Solutions</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f0f2f5;
+      background-color: #f4f4f4;
       color: #333;
-      padding: 0;
     }
-
+    header, nav, section, footer {
+      display: block;
+    }
     header {
       background: #0057b8;
       color: white;
-      padding: 30px 0;
+      padding: 60px 20px;
       text-align: center;
     }
-
-    .container {
-      padding: 40px 20px;
-      max-width: 1000px;
-      margin: auto;
+    nav {
+      background: #003d80;
+      padding: 10px 0;
       text-align: center;
     }
-
-    .btn {
-      display: inline-block;
-      margin-top: 40px;
-      background-color: #003d80;
+    nav a {
       color: white;
-      padding: 12px 24px;
+      margin: 0 15px;
       text-decoration: none;
-      border-radius: 6px;
+      font-weight: bold;
+    }
+    section {
+      padding: 60px 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    .services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .service-box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      flex: 1 1 250px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    footer {
+      background: #003d80;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    /* Login */
+    #login-section {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    #login-section input {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #login-section button {
+      background-color: #0057b8;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      width: 100%;
       font-size: 16px;
+      cursor: pointer;
+    }
+    #login-message {
+      color: red;
+      text-align: center;
+      font-weight: bold;
     }
 
-    .btn:hover {
-      background-color: #002d60;
+    /* Dashboard */
+    #dashboard {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
     }
-
-    /* Profile Box */
     .profile-box {
       background-color: white;
       border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       padding: 20px;
-      margin-bottom: 40px;
-      text-align: left;
+      margin: auto;
       max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
-    .profile-box h3 {
-      margin-top: 0;
-      color: #0057b8;
-    }
-
-    .profile-box p {
-      margin: 6px 0;
-    }
-
-    /* Dashboard Cards */
     .cards {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
-      margin-top: 40px;
+      margin-top: 30px;
     }
-
     .card {
       background: white;
       padding: 20px;
       border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       flex: 1 1 250px;
-      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-
-    .card h3 {
-      margin-bottom: 10px;
-      color: #0057b8;
+    .btn-logout {
+      margin-top: 30px;
+      background: #003d80;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Welcome to Your Dashboard</h1>
-    <p>You're now logged in to KonnectBPO</p>
+    <img src="download.jpg" alt="KonnectBPO Logo" style="height: 60px; margin-bottom: 20px;" />
+    <h1>KonnectBPO</h1>
+    <p>Smart Business Process Outsourcing Solutions</p>
   </header>
 
-  <div class="container">
+  <nav>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+  </nav>
 
-    <!-- Profile Section -->
+  <!-- 🔐 Login -->
+  <section id="login-section">
+    <h2>Login</h2>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p id="login-message"></p>
+  </section>
+
+  <!-- 🌐 Website Sections -->
+  <section id="about">
+    <h2>About Us</h2>
+    <p>KonnectBPO helps businesses streamline operations with cost-effective outsourcing.</p>
+  </section>
+
+  <section id="services">
+    <h2>Our Services</h2>
+    <div class="services">
+      <div class="service-box"><h3>Customer Support</h3><p>24/7 multilingual support via phone, email, and chat.</p></div>
+      <div class="service-box"><h3>Data Entry</h3><p>Fast and accurate entry for finance, HR, CRM systems.</p></div>
+      <div class="service-box"><h3>Back Office</h3><p>Billing, processing, and admin services tailored to you.</p></div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p>Email: info@konnectbpo.com</p>
+    <p>Phone: +94 77 123 4567</p>
+    <p>Address: 123 Business Park, Colombo, Sri Lanka</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 KonnectBPO. All rights reserved.</p>
+  </footer>
+
+  <!-- 📊 Dashboard -->
+  <section id="dashboard">
     <div class="profile-box">
-      <h3>👤 Admin Profile</h3>
-      <p><strong>Name:</strong> Admin</p>
+      <h2>Welcome, Admin</h2>
       <p><strong>Email:</strong> admin@konnectbpo.com</p>
       <p><strong>Role:</strong> Manager</p>
     </div>
 
-    <h2>Hello, Admin!</h2>
-    <p>Here you can view insights, manage data, or customize your site.</p>
-
-    <!-- Dashboard Cards -->
     <div class="cards">
-      <div class="card">
-        <h3>📁 Projects</h3>
-        <p>12 Ongoing Projects</p>
-      </div>
-      <div class="card">
-        <h3>👥 Clients</h3>
-        <p>58 Active Clients</p>
-      </div>
-      <div class="card">
-        <h3>📞 Support Tickets</h3>
-        <p>7 Open Tickets</p>
-      </div>
+      <div class="card"><h3>Projects</h3><p>12 Ongoing</p></div>
+      <div class="card"><h3>Clients</h3><p>58 Active</p></div>
+      <div class="card"><h3>Support</h3><p>7 Open Tickets</p></div>
     </div>
 
-    <a class="btn" href="index.html">🔙 Logout / Back to Home</a>
-  </div>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+  </section>
+
+  <!-- 🔁 Script -->
+  <script>
+    const form = document.getElementById('login-form');
+    const message = document.getElementById('login-message');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+
+      if (user === 'admin' && pass === 'password123') {
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('about').style.display = 'none';
+        document.getElementById('services').style.display = 'none';
+        document.getElementById('contact').style.display = 'none';
+        document.querySelector('footer').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+      } else {
+        message.textContent = 'Invalid login credentials!';
+      }
+    });
+
+    function logout() {
+      location.reload(); // Reloads full page (goes back to website view)
+    }
+  </script>
 </body>
 </html>
