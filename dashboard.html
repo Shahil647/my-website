@@ -63,14 +63,25 @@
       color: #0057b8;
     }
 
-    /* Chart container */
-    #chart-container {
-      max-width: 600px;
-      margin: 60px auto 20px;
+    /* Chart container for two charts side-by-side */
+    .charts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      margin-top: 60px;
+    }
+    .chart-box {
       background: white;
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      flex: 1 1 450px;
+      text-align: center;
+    }
+    canvas {
+      max-width: 100%;
+      height: auto;
     }
   </style>
 </head>
@@ -84,7 +95,7 @@
     <h2>Hello, Admin!</h2>
     <p>Here you can view insights, manage data, or customize your site.</p>
 
-    <!-- 🚀 Dashboard Cards Start -->
+    <!-- Dashboard Cards -->
     <div class="cards">
       <div class="card">
         <h3>📁 Projects</h3>
@@ -99,21 +110,27 @@
         <p>7 Open Tickets</p>
       </div>
     </div>
-    <!-- 🚀 Dashboard Cards End -->
 
-    <!-- 📊 Chart Section -->
-    <div id="chart-container">
-      <h3>Monthly Support Tickets</h3>
-      <canvas id="myChart" width="400" height="200"></canvas>
+    <!-- Two charts side-by-side -->
+    <div class="charts">
+      <div class="chart-box">
+        <h3>Monthly Support Tickets</h3>
+        <canvas id="ticketsChart" width="400" height="200"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Project Progress</h3>
+        <canvas id="projectsChart" width="400" height="200"></canvas>
+      </div>
     </div>
 
     <a class="btn" href="index.html">🔙 Logout / Back to Home</a>
   </div>
 
-  <!-- 📈 Chart Script -->
+  <!-- Chart.js Scripts -->
   <script>
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const myChart = new Chart(ctx, {
+    // Bar Chart - Monthly Support Tickets
+    const ticketsCtx = document.getElementById('ticketsChart').getContext('2d');
+    new Chart(ticketsCtx, {
       type: 'bar',
       data: {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
@@ -132,6 +149,24 @@
             beginAtZero: true
           }
         }
+      }
+    });
+
+    // Doughnut Chart - Project Progress
+    const projectsCtx = document.getElementById('projectsChart').getContext('2d');
+    new Chart(projectsCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Completed', 'In Progress', 'Pending'],
+        datasets: [{
+          label: 'Projects',
+          data: [6, 4, 2],
+          backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true
       }
     });
   </script>
