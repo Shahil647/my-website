@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KonnectBPO - Business Solutions</title>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       margin: 0;
@@ -93,6 +95,8 @@
       display: none;
       text-align: center;
       padding: 40px 20px;
+      max-width: 900px;
+      margin: auto;
     }
     .profile-box {
       background-color: white;
@@ -124,6 +128,31 @@
       border-radius: 6px;
       text-decoration: none;
       cursor: pointer;
+    }
+
+    /* Chart container for side-by-side */
+    #charts-wrapper {
+      display: flex;
+      gap: 40px;
+      margin-top: 50px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .chart-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 400px;
+    }
+    .chart-box h3 {
+      color: #0057b8;
+      margin-bottom: 15px;
+    }
+    canvas {
+      /* ensure canvas fills container */
+      width: 100% !important;
+      height: 250px !important;
     }
   </style>
 </head>
@@ -191,6 +220,18 @@
       <div class="card"><h3>Support</h3><p>7 Open Tickets</p></div>
     </div>
 
+    <!-- Two charts side by side -->
+    <div id="charts-wrapper">
+      <div class="chart-box">
+        <h3>Monthly Projects</h3>
+        <canvas id="projectsChart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Support Tickets Trend</h3>
+        <canvas id="ticketsChart"></canvas>
+      </div>
+    </div>
+
     <button class="btn-logout" onclick="logout()">Logout</button>
   </section>
 
@@ -211,6 +252,9 @@
         document.getElementById('contact').style.display = 'none';
         document.querySelector('footer').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
+
+        // Initialize charts after dashboard is shown
+        initCharts();
       } else {
         message.textContent = 'Invalid login credentials!';
       }
@@ -218,6 +262,51 @@
 
     function logout() {
       location.reload(); // Reloads full page (goes back to website view)
+    }
+
+    // Chart initialization function
+    function initCharts() {
+      const ctxProjects = document.getElementById('projectsChart').getContext('2d');
+      const projectsChart = new Chart(ctxProjects, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Projects',
+            data: [3, 5, 7, 10, 9, 12],
+            backgroundColor: 'rgba(0, 87, 184, 0.2)',
+            borderColor: '#0057b8',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      const ctxTickets = document.getElementById('ticketsChart').getContext('2d');
+      const ticketsChart = new Chart(ctxTickets, {
+        type: 'bar',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Support Tickets',
+            data: [5, 8, 6, 9, 7, 10],
+            backgroundColor: '#003d80'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
     }
   </script>
 </body>
