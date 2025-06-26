@@ -216,7 +216,7 @@
       <br />
       <h3>Add a New FAQ</h3>
       <input type="text" id="faq-question" placeholder="Enter question" />
-      <textarea id="faq-answer" placeholder="Enter answer"></textarea>
+      <textarea id="faq-answer" placeholder="Enter answer (one step per line)"></textarea>
       <button onclick="addFAQ()" class="btn-logout">Add FAQ</button>
     </div>
     <button class="btn-logout" onclick="logout()">Logout</button>
@@ -241,9 +241,11 @@
         message.textContent = 'Invalid login credentials!';
       }
     });
+
     function logout() {
       location.reload();
     }
+
     function initCharts() {
       const ctxProjects = document.getElementById('projectsChart').getContext('2d');
       new Chart(ctxProjects, {
@@ -262,6 +264,7 @@
         },
         options: { responsive: true, scales: { y: { beginAtZero: true } } }
       });
+
       const ctxTickets = document.getElementById('ticketsChart').getContext('2d');
       new Chart(ctxTickets, {
         type: 'bar',
@@ -276,6 +279,7 @@
         options: { responsive: true, scales: { y: { beginAtZero: true } } }
       });
     }
+
     function addFAQ() {
       const question = document.getElementById('faq-question').value.trim();
       const answer = document.getElementById('faq-answer').value.trim();
@@ -290,22 +294,30 @@
       document.getElementById('faq-answer').value = '';
       loadFAQs();
     }
+
     function deleteFAQ(index) {
       const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
       faqList.splice(index, 1);
       localStorage.setItem('faqs', JSON.stringify(faqList));
       loadFAQs();
     }
+
     function loadFAQs() {
       const faqListDiv = document.getElementById('faq-list');
       const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
       faqListDiv.innerHTML = '';
       faqList.forEach((faq, index) => {
+        const steps = faq.answer
+          .split('\n')
+          .filter(line => line.trim() !== '')
+          .map((line, i) => `<li>Step ${i + 1}: ${line.trim()}</li>`)
+          .join('');
+
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
           <h4>${faq.question}</h4>
-          <p>${faq.answer}</p>
+          <ol>${steps}</ol>
           <button onclick="deleteFAQ(${index})" style="background:#c62828;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;">Delete</button>
         `;
         faqListDiv.appendChild(card);
