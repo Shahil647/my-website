@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KonnectBPO - Business Solutions</title>
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
@@ -155,13 +154,11 @@
     <h1>KonnectBPO</h1>
     <p>Smart Business Process Outsourcing Solutions</p>
   </header>
-
   <nav>
     <a href="#about">About</a>
     <a href="#services">Services</a>
     <a href="#contact">Contact</a>
   </nav>
-
   <section id="login-section">
     <h2>Login</h2>
     <form id="login-form">
@@ -171,12 +168,10 @@
     </form>
     <p id="login-message"></p>
   </section>
-
   <section id="about">
     <h2>About Us</h2>
     <p>KonnectBPO helps businesses streamline operations with cost-effective outsourcing.</p>
   </section>
-
   <section id="services">
     <h2>Our Services</h2>
     <div class="services">
@@ -185,31 +180,26 @@
       <div class="service-box"><h3>Back Office</h3><p>Billing, processing, and admin services tailored to you.</p></div>
     </div>
   </section>
-
   <section id="contact">
     <h2>Contact Us</h2>
     <p>Email: info@konnectbpo.com</p>
     <p>Phone: +94 77 123 4567</p>
     <p>Address: 123 Business Park, Colombo, Sri Lanka</p>
   </section>
-
   <footer>
     <p>&copy; 2025 KonnectBPO. All rights reserved.</p>
   </footer>
-
   <section id="dashboard">
     <div class="profile-box">
       <h2>Welcome, Admin</h2>
       <p><strong>Email:</strong> admin@konnectbpo.com</p>
       <p><strong>Role:</strong> Manager</p>
     </div>
-
     <div class="cards">
       <div class="card"><h3>Projects</h3><p>12 Ongoing</p></div>
       <div class="card"><h3>Clients</h3><p>58 Active</p></div>
       <div class="card"><h3>Support</h3><p>7 Open Tickets</p></div>
     </div>
-
     <div id="charts-wrapper">
       <div class="chart-box">
         <h3>Monthly Projects</h3>
@@ -220,39 +210,24 @@
         <canvas id="ticketsChart"></canvas>
       </div>
     </div>
-
-    <!-- 💡 Knowledge Portal -->
     <div class="profile-box" style="margin-top: 40px;">
       <h2>Knowledge Portal - FAQs</h2>
-      <div id="faq-list">
-        <div class="card">
-          <h4>How do I reset my password?</h4>
-          <p>Contact IT support or use the "Forgot Password" option on the login page.</p>
-        </div>
-        <div class="card">
-          <h4>How can I reach HR?</h4>
-          <p>Email hr@konnectbpo.com or visit the HR portal through the intranet.</p>
-        </div>
-      </div>
+      <div id="faq-list"></div>
       <br />
       <h3>Add a New FAQ</h3>
       <input type="text" id="faq-question" placeholder="Enter question" />
       <textarea id="faq-answer" placeholder="Enter answer"></textarea>
       <button onclick="addFAQ()" class="btn-logout">Add FAQ</button>
     </div>
-
     <button class="btn-logout" onclick="logout()">Logout</button>
   </section>
-
   <script>
     const form = document.getElementById('login-form');
     const message = document.getElementById('login-message');
-
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       const user = document.getElementById('username').value;
       const pass = document.getElementById('password').value;
-
       if (user === 'admin' && pass === 'password123') {
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('about').style.display = 'none';
@@ -261,15 +236,14 @@
         document.querySelector('footer').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         initCharts();
+        loadFAQs();
       } else {
         message.textContent = 'Invalid login credentials!';
       }
     });
-
     function logout() {
       location.reload();
     }
-
     function initCharts() {
       const ctxProjects = document.getElementById('projectsChart').getContext('2d');
       new Chart(ctxProjects, {
@@ -286,14 +260,8 @@
             tension: 0.3
           }]
         },
-        options: {
-          responsive: true,
-          scales: {
-            y: { beginAtZero: true }
-          }
-        }
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
       });
-
       const ctxTickets = document.getElementById('ticketsChart').getContext('2d');
       new Chart(ctxTickets, {
         type: 'bar',
@@ -305,29 +273,43 @@
             backgroundColor: '#003d80'
           }]
         },
-        options: {
-          responsive: true,
-          scales: {
-            y: { beginAtZero: true }
-          }
-        }
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
       });
     }
-
     function addFAQ() {
       const question = document.getElementById('faq-question').value.trim();
       const answer = document.getElementById('faq-answer').value.trim();
-      if (question && answer) {
-        const faqList = document.getElementById('faq-list');
-        const faqCard = document.createElement('div');
-        faqCard.className = 'card';
-        faqCard.innerHTML = `<h4>${question}</h4><p>${answer}</p>`;
-        faqList.appendChild(faqCard);
-        document.getElementById('faq-question').value = '';
-        document.getElementById('faq-answer').value = '';
-      } else {
+      if (!question || !answer) {
         alert("Please fill both question and answer.");
+        return;
       }
+      const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
+      faqList.push({ question, answer });
+      localStorage.setItem('faqs', JSON.stringify(faqList));
+      document.getElementById('faq-question').value = '';
+      document.getElementById('faq-answer').value = '';
+      loadFAQs();
+    }
+    function deleteFAQ(index) {
+      const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
+      faqList.splice(index, 1);
+      localStorage.setItem('faqs', JSON.stringify(faqList));
+      loadFAQs();
+    }
+    function loadFAQs() {
+      const faqListDiv = document.getElementById('faq-list');
+      const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
+      faqListDiv.innerHTML = '';
+      faqList.forEach((faq, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h4>${faq.question}</h4>
+          <p>${faq.answer}</p>
+          <button onclick="deleteFAQ(${index})" style="background:#c62828;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;">Delete</button>
+        `;
+        faqListDiv.appendChild(card);
+      });
     }
   </script>
 </body>
