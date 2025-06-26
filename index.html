@@ -149,79 +149,10 @@
   </style>
 </head>
 <body>
-  <header>
-    <img src="download.jpg" alt="KonnectBPO Logo" style="height: 60px; margin-bottom: 20px;" />
-    <h1>KonnectBPO</h1>
-    <p>Smart Business Process Outsourcing Solutions</p>
-  </header>
-  <nav>
-    <a href="#about">About</a>
-    <a href="#services">Services</a>
-    <a href="#contact">Contact</a>
-  </nav>
-  <section id="login-section">
-    <h2>Login</h2>
-    <form id="login-form">
-      <input type="text" id="username" placeholder="Username" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <button type="submit">Login</button>
-    </form>
-    <p id="login-message"></p>
-  </section>
-  <section id="about">
-    <h2>About Us</h2>
-    <p>KonnectBPO helps businesses streamline operations with cost-effective outsourcing.</p>
-  </section>
-  <section id="services">
-    <h2>Our Services</h2>
-    <div class="services">
-      <div class="service-box"><h3>Customer Support</h3><p>24/7 multilingual support via phone, email, and chat.</p></div>
-      <div class="service-box"><h3>Data Entry</h3><p>Fast and accurate entry for finance, HR, CRM systems.</p></div>
-      <div class="service-box"><h3>Back Office</h3><p>Billing, processing, and admin services tailored to you.</p></div>
-    </div>
-  </section>
-  <section id="contact">
-    <h2>Contact Us</h2>
-    <p>Email: info@konnectbpo.com</p>
-    <p>Phone: +94 77 123 4567</p>
-    <p>Address: 123 Business Park, Colombo, Sri Lanka</p>
-  </section>
-  <footer>
-    <p>&copy; 2025 KonnectBPO. All rights reserved.</p>
-  </footer>
-  <section id="dashboard">
-    <div class="profile-box">
-      <h2>Welcome, Admin</h2>
-      <p><strong>Email:</strong> admin@konnectbpo.com</p>
-      <p><strong>Role:</strong> Manager</p>
-    </div>
-    <div class="cards">
-      <div class="card"><h3>Projects</h3><p>12 Ongoing</p></div>
-      <div class="card"><h3>Clients</h3><p>58 Active</p></div>
-      <div class="card"><h3>Support</h3><p>7 Open Tickets</p></div>
-    </div>
-    <div id="charts-wrapper">
-      <div class="chart-box">
-        <h3>Monthly Projects</h3>
-        <canvas id="projectsChart"></canvas>
-      </div>
-      <div class="chart-box">
-        <h3>Support Tickets Trend</h3>
-        <canvas id="ticketsChart"></canvas>
-      </div>
-    </div>
-    <div class="profile-box" style="margin-top: 40px;">
-      <h2>Knowledge Portal - FAQs</h2>
-      <div id="faq-list"></div>
-      <br />
-      <h3>Add a New FAQ</h3>
-      <input type="text" id="faq-question" placeholder="Enter question" />
-      <textarea id="faq-answer" placeholder="Enter answer (one step per line)"></textarea>
-      <button onclick="addFAQ()" class="btn-logout">Add FAQ</button>
-    </div>
-    <button class="btn-logout" onclick="logout()">Logout</button>
-  </section>
+  <!-- The rest of your unchanged HTML body -->
+  <!-- The updated script tag is included below -->
   <script>
+    let editingIndex = null;
     const form = document.getElementById('login-form');
     const message = document.getElementById('login-message');
     form.addEventListener('submit', function (e) {
@@ -288,7 +219,13 @@
         return;
       }
       const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
-      faqList.push({ question, answer });
+      if (editingIndex !== null) {
+        faqList[editingIndex] = { question, answer };
+        editingIndex = null;
+        document.querySelector('.btn-logout').textContent = 'Add FAQ';
+      } else {
+        faqList.push({ question, answer });
+      }
       localStorage.setItem('faqs', JSON.stringify(faqList));
       document.getElementById('faq-question').value = '';
       document.getElementById('faq-answer').value = '';
@@ -302,22 +239,27 @@
       loadFAQs();
     }
 
+    function editFAQ(index) {
+      const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
+      const faq = faqList[index];
+      document.getElementById('faq-question').value = faq.question;
+      document.getElementById('faq-answer').value = faq.answer;
+      editingIndex = index;
+      document.querySelector('.btn-logout').textContent = 'Update FAQ';
+    }
+
     function loadFAQs() {
       const faqListDiv = document.getElementById('faq-list');
       const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
       faqListDiv.innerHTML = '';
       faqList.forEach((faq, index) => {
-        const steps = faq.answer
-          .split('\n')
-          .filter(line => line.trim() !== '')
-          .map((line, i) => `<li>Step ${i + 1}: ${line.trim()}</li>`)
-          .join('');
-
         const card = document.createElement('div');
         card.className = 'card';
+        const steps = faq.answer.trim().split('\n').map((step, i) => `<li>Step ${i + 1}: ${step}</li>`).join('');
         card.innerHTML = `
           <h4>${faq.question}</h4>
           <ol>${steps}</ol>
+          <button onclick="editFAQ(${index})" style="background:#1976d2;color:white;border:none;padding:6px 12px;border-radius:5px;margin-right:5px;cursor:pointer;">Edit</button>
           <button onclick="deleteFAQ(${index})" style="background:#c62828;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;">Delete</button>
         `;
         faqListDiv.appendChild(card);
