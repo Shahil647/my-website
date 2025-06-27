@@ -70,7 +70,6 @@
       margin: 8px 0 20px;
       border: 1px solid #ccc;
       border-radius: 5px;
-      box-sizing: border-box;
     }
     #login-section button {
       background-color: #0057b8;
@@ -115,6 +114,7 @@
       border-radius: 12px;
       flex: 1 1 250px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
     }
     .btn-logout {
       margin-top: 30px;
@@ -124,7 +124,20 @@
       border-radius: 6px;
       text-decoration: none;
       cursor: pointer;
-      border: none;
+    }
+    .step-card {
+      background-color: #f9f9f9;
+      padding: 10px 15px;
+      margin: 10px 0;
+      border-left: 4px solid #0057b8;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      text-align: left;
+    }
+    .step-card strong {
+      display: block;
+      color: #0057b8;
+      margin-bottom: 5px;
     }
     #charts-wrapper {
       display: flex;
@@ -147,19 +160,6 @@
     canvas {
       width: 100% !important;
       height: 250px !important;
-    }
-    #faq-list .card {
-      text-align: left;
-    }
-    #faq-list .card h4 {
-      margin-top: 0;
-    }
-    #faq-list .card ol {
-      padding-left: 20px;
-      margin-top: 5px;
-    }
-    #faq-list button {
-      margin-top: 10px;
     }
   </style>
 </head>
@@ -204,21 +204,17 @@
   <footer>
     <p>&copy; 2025 KonnectBPO. All rights reserved.</p>
   </footer>
-
-  <!-- Dashboard Section -->
   <section id="dashboard">
     <div class="profile-box">
       <h2>Welcome, Admin</h2>
       <p><strong>Email:</strong> admin@konnectbpo.com</p>
       <p><strong>Role:</strong> Manager</p>
     </div>
-
     <div class="cards">
       <div class="card"><h3>Projects</h3><p>12 Ongoing</p></div>
       <div class="card"><h3>Clients</h3><p>58 Active</p></div>
       <div class="card"><h3>Support</h3><p>7 Open Tickets</p></div>
     </div>
-
     <div id="charts-wrapper">
       <div class="chart-box">
         <h3>Monthly Projects</h3>
@@ -229,20 +225,17 @@
         <canvas id="ticketsChart"></canvas>
       </div>
     </div>
-
     <div class="profile-box" style="margin-top: 40px;">
       <h2>Knowledge Portal - FAQs</h2>
       <div id="faq-list"></div>
       <br />
-      <h3>Add or Edit FAQ</h3>
+      <h3>Add a New FAQ</h3>
       <input type="text" id="faq-question" placeholder="Enter question" />
-      <textarea id="faq-answer" placeholder="Enter each step on a new line"></textarea>
-      <button onclick="addFAQ()" class="btn-logout">Add FAQ</button>
+      <textarea id="faq-answer" placeholder="Enter answer with steps separated by new lines"></textarea>
+      <button onclick="addFAQ()" class="btn-logout" id="faq-submit">Add FAQ</button>
     </div>
-
     <button class="btn-logout" onclick="logout()">Logout</button>
   </section>
-
   <script>
     let editingIndex = null;
 
@@ -316,7 +309,7 @@
       if (editingIndex !== null) {
         faqList[editingIndex] = { question, answer };
         editingIndex = null;
-        document.querySelector('.btn-logout').textContent = 'Add FAQ';
+        document.getElementById('faq-submit').textContent = 'Add FAQ';
       } else {
         faqList.push({ question, answer });
       }
@@ -330,13 +323,6 @@
       const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
       faqList.splice(index, 1);
       localStorage.setItem('faqs', JSON.stringify(faqList));
-      // reset editing if deleting the editing one
-      if (editingIndex === index) {
-        editingIndex = null;
-        document.querySelector('.btn-logout').textContent = 'Add FAQ';
-        document.getElementById('faq-question').value = '';
-        document.getElementById('faq-answer').value = '';
-      }
       loadFAQs();
     }
 
@@ -346,7 +332,7 @@
       document.getElementById('faq-question').value = faq.question;
       document.getElementById('faq-answer').value = faq.answer;
       editingIndex = index;
-      document.querySelector('.btn-logout').textContent = 'Update FAQ';
+      document.getElementById('faq-submit').textContent = 'Update FAQ';
     }
 
     function loadFAQs() {
@@ -356,15 +342,19 @@
       faqList.forEach((faq, index) => {
         const card = document.createElement('div');
         card.className = 'card';
-        // Format answer into ordered steps by splitting lines
         const steps = faq.answer
           .split('\n')
           .filter(line => line.trim() !== '')
-          .map((step, i) => `<li>Step ${i + 1}: ${step.trim()}</li>`)
+          .map((step, i) => `
+            <div class="step-card">
+              <strong>Step ${i + 1}</strong>
+              ${step.trim()}
+            </div>
+          `)
           .join('');
         card.innerHTML = `
           <h4>${faq.question}</h4>
-          <ol>${steps}</ol>
+          ${steps}
           <button onclick="editFAQ(${index})" style="background:#1976d2;color:white;border:none;padding:6px 12px;border-radius:5px;margin-right:5px;cursor:pointer;">Edit</button>
           <button onclick="deleteFAQ(${index})" style="background:#c62828;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;">Delete</button>
         `;
