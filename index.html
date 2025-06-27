@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KonnectBPO - Business Solutions</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
   <style>
     :root {
       --primary-color: #0057b8;
@@ -298,8 +303,24 @@
     </div>
     <button class="btn-logout" onclick="logout()">Logout</button>
   </section>
+
   <script>
-    let editingIndex = null;
+    // Your Firebase config here — Replace with your own Firebase config object from Firebase Console
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY_HERE",
+      authDomain: "YOUR_AUTH_DOMAIN_HERE",
+      projectId: "YOUR_PROJECT_ID_HERE",
+      storageBucket: "YOUR_STORAGE_BUCKET_HERE",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID_HERE",
+      appId: "YOUR_APP_ID_HERE"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    let editingId = null;
+
     const form = document.getElementById('login-form');
     const message = document.getElementById('login-message');
 
@@ -321,7 +342,9 @@
       }
     });
 
-    function logout() { location.reload(); }
+    function logout() {
+      location.reload();
+    }
 
     function initCharts() {
       new Chart(document.getElementById('projectsChart').getContext('2d'), {
@@ -355,48 +378,52 @@
       });
     }
 
-    function addFAQ() {
+    async function addFAQ() {
       const question = document.getElementById('faq-question').value.trim();
       const answer = document.getElementById('faq-answer').value.trim();
       if (!question || !answer) {
         alert("Please fill both question and answer.");
         return;
       }
-      const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
-      if (editingIndex !== null) {
-        faqList[editingIndex] = { question, answer };
-        editingIndex = null;
+
+      if (editingId) {
+        // Update existing FAQ
+        await db.collection('faqs').doc(editingId).set({ question, answer });
+        editingId = null;
         document.getElementById('faq-submit').textContent = 'Add FAQ';
       } else {
-        faqList.push({ question, answer });
+        // Add new FAQ
+        await db.collection('faqs').add({ question, answer });
       }
-      localStorage.setItem('faqs', JSON.stringify(faqList));
+
       document.getElementById('faq-question').value = '';
       document.getElementById('faq-answer').value = '';
       loadFAQs();
     }
 
-    function deleteFAQ(index) {
-      const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
-      faqList.splice(index, 1);
-      localStorage.setItem('faqs', JSON.stringify(faqList));
+    async function deleteFAQ(id) {
+      await db.collection('faqs').doc(id).delete();
       loadFAQs();
     }
 
-    function editFAQ(index) {
-      const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
-      const faq = faqList[index];
-      document.getElementById('faq-question').value = faq.question;
-      document.getElementById('faq-answer').value = faq.answer;
-      editingIndex = index;
-      document.getElementById('faq-submit').textContent = 'Update FAQ';
+    async function editFAQ(id) {
+      const doc = await db.collection('faqs').doc(id).get();
+      if (doc.exists) {
+        const data = doc.data();
+        document.getElementById('faq-question').value = data.question;
+        document.getElementById('faq-answer').value = data.answer;
+        editingId = id;
+        document.getElementById('faq-submit').textContent = 'Update FAQ';
+      }
     }
 
-    function loadFAQs() {
+    async function loadFAQs() {
       const faqListDiv = document.getElementById('faq-list');
-      const faqList = JSON.parse(localStorage.getItem('faqs') || '[]');
       faqListDiv.innerHTML = '';
-      faqList.forEach((faq, index) => {
+      const snapshot = await db.collection('faqs').orderBy('question').get();
+      snapshot.forEach(doc => {
+        const faq = doc.data();
+        const id = doc.id;
         const card = document.createElement('div');
         card.className = 'card';
         const steps = faq.answer
@@ -410,8 +437,8 @@
         card.innerHTML = `
           <h4>${faq.question}</h4>
           ${steps}
-          <button class="edit" onclick="editFAQ(${index})">Edit</button>
-          <button class="delete" onclick="deleteFAQ(${index})">Delete</button>
+          <button class="edit" onclick="editFAQ('${id}')">Edit</button>
+          <button class="delete" onclick="deleteFAQ('${id}')">Delete</button>
         `;
         faqListDiv.appendChild(card);
       });
