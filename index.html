@@ -6,166 +6,228 @@
   <title>KonnectBPO - Business Solutions</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    :root {
+      --primary-color: #0057b8;
+      --dark-blue: #003d80;
+      --accent-color: #009688;
+      --light-bg: #f0f4f8;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --btn-hover: #0073e6;
+    }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
+      background-color: var(--light-bg);
+      color: var(--text-color);
     }
-    header, nav, section, footer {
-      display: block;
-    }
+
     header {
-      background: #0057b8;
+      background: var(--primary-color);
       color: white;
       padding: 60px 20px;
       text-align: center;
     }
+
+    header img {
+      height: 60px;
+      margin-bottom: 15px;
+    }
+
     nav {
-      background: #003d80;
-      padding: 10px 0;
+      background: var(--dark-blue);
+      padding: 12px 0;
       text-align: center;
     }
+
     nav a {
       color: white;
       margin: 0 15px;
       text-decoration: none;
       font-weight: bold;
+      transition: color 0.3s;
     }
+
+    nav a:hover {
+      color: #ffc107;
+    }
+
     section {
       padding: 60px 20px;
-      max-width: 900px;
+      max-width: 960px;
       margin: auto;
     }
+
     .services {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
     }
+
     .service-box {
-      background: white;
+      background: var(--card-bg);
       padding: 20px;
       border-radius: 10px;
       flex: 1 1 250px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
     }
+
+    .service-box:hover {
+      transform: translateY(-5px);
+    }
+
     footer {
-      background: #003d80;
+      background: var(--dark-blue);
       color: white;
       text-align: center;
       padding: 20px 0;
     }
+
     #login-section {
       max-width: 400px;
       margin: 40px auto;
       padding: 30px;
-      background: white;
-      border-radius: 10px;
+      background: var(--card-bg);
+      border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
+
     #login-section input, textarea {
       width: 100%;
-      padding: 8px;
-      margin: 8px 0 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    #login-section button {
-      background-color: #0057b8;
-      color: white;
       padding: 10px;
+      margin: 10px 0 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    #login-section button {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       width: 100%;
       font-size: 16px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
+
+    #login-section button:hover {
+      background-color: var(--btn-hover);
+    }
+
     #login-message {
       color: red;
       text-align: center;
       font-weight: bold;
     }
+
     #dashboard {
       display: none;
       text-align: center;
-      padding: 40px 20px;
-      max-width: 900px;
-      margin: auto;
     }
-    .profile-box {
-      background-color: white;
+
+    .profile-box, .chart-box {
+      background-color: var(--card-bg);
       border-radius: 12px;
-      padding: 20px;
-      margin: auto;
-      max-width: 500px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 25px;
+      margin: 30px auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      max-width: 600px;
     }
+
     .cards {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       justify-content: center;
-      margin-top: 30px;
     }
+
     .card {
-      background: white;
+      background: var(--card-bg);
       padding: 20px;
       border-radius: 12px;
-      flex: 1 1 250px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      flex: 1 1 260px;
     }
+
     .btn-logout {
-      margin-top: 30px;
-      background: #003d80;
+      background: var(--dark-blue);
       color: white;
       padding: 10px 20px;
       border-radius: 6px;
       text-decoration: none;
       cursor: pointer;
+      border: none;
+      margin-top: 20px;
+      transition: background-color 0.3s;
     }
-    .step-card {
-      background-color: #f9f9f9;
-      padding: 10px 15px;
-      margin: 10px 0;
-      border-left: 4px solid #0057b8;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      text-align: left;
+
+    .btn-logout:hover {
+      background: #001f4d;
     }
-    .step-card strong {
-      display: block;
-      color: #0057b8;
-      margin-bottom: 5px;
-    }
+
     #charts-wrapper {
       display: flex;
-      gap: 40px;
-      margin-top: 50px;
+      gap: 30px;
       justify-content: center;
       flex-wrap: wrap;
     }
-    .chart-box {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      width: 400px;
-    }
-    .chart-box h3 {
-      color: #0057b8;
-      margin-bottom: 15px;
-    }
+
     canvas {
       width: 100% !important;
       height: 250px !important;
+    }
+
+    .step-card {
+      background-color: #e3f2fd;
+      padding: 10px 15px;
+      margin: 10px 0;
+      border-left: 5px solid var(--primary-color);
+      border-radius: 6px;
+      text-align: left;
+    }
+
+    .step-card strong {
+      color: var(--primary-color);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    button.edit, button.delete {
+      padding: 6px 12px;
+      margin-top: 10px;
+      margin-right: 8px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button.edit {
+      background: #1976d2;
+      color: white;
+    }
+
+    button.delete {
+      background: #c62828;
+      color: white;
+    }
+
+    button.edit:hover {
+      background: #115293;
+    }
+
+    button.delete:hover {
+      background: #9b1b1b;
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="download.jpg" alt="KonnectBPO Logo" style="height: 60px; margin-bottom: 20px;" />
+    <img src="download.jpg" alt="KonnectBPO Logo" />
     <h1>KonnectBPO</h1>
     <p>Smart Business Process Outsourcing Solutions</p>
   </header>
@@ -238,7 +300,6 @@
   </section>
   <script>
     let editingIndex = null;
-
     const form = document.getElementById('login-form');
     const message = document.getElementById('login-message');
 
@@ -260,13 +321,10 @@
       }
     });
 
-    function logout() {
-      location.reload();
-    }
+    function logout() { location.reload(); }
 
     function initCharts() {
-      const ctxProjects = document.getElementById('projectsChart').getContext('2d');
-      new Chart(ctxProjects, {
+      new Chart(document.getElementById('projectsChart').getContext('2d'), {
         type: 'line',
         data: {
           labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -283,8 +341,7 @@
         options: { responsive: true, scales: { y: { beginAtZero: true } } }
       });
 
-      const ctxTickets = document.getElementById('ticketsChart').getContext('2d');
-      new Chart(ctxTickets, {
+      new Chart(document.getElementById('ticketsChart').getContext('2d'), {
         type: 'bar',
         data: {
           labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -347,16 +404,14 @@
           .filter(line => line.trim() !== '')
           .map((step, i) => `
             <div class="step-card">
-              <strong>Step ${i + 1}</strong>
-              ${step.trim()}
+              <strong>Step ${i + 1}</strong>${step.trim()}
             </div>
-          `)
-          .join('');
+          `).join('');
         card.innerHTML = `
           <h4>${faq.question}</h4>
           ${steps}
-          <button onclick="editFAQ(${index})" style="background:#1976d2;color:white;border:none;padding:6px 12px;border-radius:5px;margin-right:5px;cursor:pointer;">Edit</button>
-          <button onclick="deleteFAQ(${index})" style="background:#c62828;color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;">Delete</button>
+          <button class="edit" onclick="editFAQ(${index})">Edit</button>
+          <button class="delete" onclick="deleteFAQ(${index})">Delete</button>
         `;
         faqListDiv.appendChild(card);
       });
