@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KonnectBPO - Business Solutions</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
   <style>
@@ -18,150 +17,30 @@
       --text-color: #333;
       --btn-hover: #0073e6;
     }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--light-bg);
-      color: var(--text-color);
-    }
-    header {
-      background: var(--primary-color);
-      color: white;
-      padding: 60px 20px;
-      text-align: center;
-    }
-    header img {
-      height: 60px;
-      margin-bottom: 15px;
-    }
-    nav {
-      background: var(--dark-blue);
-      padding: 12px 0;
-      text-align: center;
-    }
-    nav a {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
+    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--light-bg); color: var(--text-color); }
+    header { background: var(--primary-color); color: white; padding: 60px 20px; text-align: center; }
+    header img { height: 60px; margin-bottom: 10px; }
+    nav { background: var(--dark-blue); padding: 12px; text-align: center; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
     nav a:hover { color: #ffc107; }
     section { padding: 60px 20px; max-width: 960px; margin: auto; }
-    .services {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-    }
-    .service-box {
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: 10px;
-      flex: 1 1 250px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      transition: transform 0.2s;
-    }
-    .service-box:hover { transform: translateY(-5px); }
-    footer {
-      background: var(--dark-blue);
-      color: white;
-      text-align: center;
-      padding: 20px 0;
-    }
-    #login-section {
-      max-width: 400px;
-      margin: 40px auto;
-      padding: 30px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    #login-section input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0 20px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    #login-section button {
-      background-color: var(--primary-color);
-      color: white;
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      width: 100%;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    #login-section button:hover { background-color: var(--btn-hover); }
-    #login-message {
-      color: red;
-      text-align: center;
-      font-weight: bold;
-    }
+    footer { background: var(--dark-blue); color: white; text-align: center; padding: 20px 0; }
+    #login-section { max-width: 400px; margin: 40px auto; padding: 30px; background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    #login-section input, textarea { width: 100%; padding: 10px; margin: 10px 0 20px; border: 1px solid #ccc; border-radius: 6px; }
+    #login-section button { background: var(--primary-color); color: white; padding: 12px; border: none; border-radius: 6px; width: 100%; font-size: 16px; cursor: pointer; }
+    #login-section button:hover { background: var(--btn-hover); }
+    #login-message { color: red; text-align: center; }
     #dashboard { display: none; text-align: center; }
-    .profile-box, .chart-box {
-      background-color: var(--card-bg);
-      border-radius: 12px;
-      padding: 25px;
-      margin: 30px auto;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      max-width: 600px;
-    }
-    .cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-    }
-    .card {
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-      flex: 1 1 260px;
-    }
-    .btn-logout {
-      background: var(--dark-blue);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      border: none;
-      margin-top: 20px;
-      transition: background-color 0.3s;
-    }
+    .profile-box, .chart-box { background: var(--card-bg); border-radius: 12px; padding: 25px; margin: 30px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.05); max-width: 600px; }
+    .cards { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .card { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); flex: 1 1 260px; }
+    .btn-logout { background: var(--dark-blue); color: white; padding: 10px 20px; border-radius: 6px; cursor: pointer; border: none; margin-top: 20px; }
     .btn-logout:hover { background: #001f4d; }
-    #charts-wrapper {
-      display: flex;
-      gap: 30px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+    #charts-wrapper { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
     canvas { width: 100% !important; height: 250px !important; }
-    .step-card {
-      background-color: #e3f2fd;
-      padding: 10px 15px;
-      margin: 10px 0;
-      border-left: 5px solid var(--primary-color);
-      border-radius: 6px;
-      text-align: left;
-    }
-    .step-card strong {
-      color: var(--primary-color);
-      display: block;
-      margin-bottom: 5px;
-    }
-    button.edit, button.delete {
-      padding: 6px 12px;
-      margin-top: 10px;
-      margin-right: 8px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+    .step-card { background: #e3f2fd; padding: 10px 15px; margin: 10px 0; border-left: 5px solid var(--primary-color); border-radius: 6px; text-align: left; }
+    .step-card strong { color: var(--primary-color); display: block; margin-bottom: 5px; }
+    button.edit, button.delete { padding: 6px 12px; margin-top: 10px; margin-right: 8px; border: none; border-radius: 5px; cursor: pointer; }
     button.edit { background: #1976d2; color: white; }
     button.delete { background: #c62828; color: white; }
     button.edit:hover { background: #115293; }
@@ -194,10 +73,10 @@
   </section>
   <section id="services">
     <h2>Our Services</h2>
-    <div class="services">
-      <div class="service-box"><h3>Customer Support</h3><p>24/7 multilingual support via phone, email, and chat.</p></div>
-      <div class="service-box"><h3>Data Entry</h3><p>Fast and accurate entry for finance, HR, CRM systems.</p></div>
-      <div class="service-box"><h3>Back Office</h3><p>Billing, processing, and admin services tailored to you.</p></div>
+    <div class="cards">
+      <div class="card"><h3>Customer Support</h3><p>24/7 multilingual support via phone, email, and chat.</p></div>
+      <div class="card"><h3>Data Entry</h3><p>Fast and accurate entry for finance, HR, CRM systems.</p></div>
+      <div class="card"><h3>Back Office</h3><p>Billing, processing, and admin services tailored to you.</p></div>
     </div>
   </section>
   <section id="contact">
@@ -206,9 +85,8 @@
     <p>Phone: +94 77 123 4567</p>
     <p>Address: 123 Business Park, Colombo, Sri Lanka</p>
   </section>
-  <footer>
-    <p>&copy; 2025 KonnectBPO. All rights reserved.</p>
-  </footer>
+  <footer>&copy; 2025 KonnectBPO. All rights reserved.</footer>
+
   <section id="dashboard">
     <div class="profile-box">
       <h2 id="dashboard-welcome">Welcome</h2>
@@ -234,13 +112,16 @@
       <h2 id="faq-heading">Knowledge Portal - FAQs</h2>
       <div id="faq-list"></div>
       <br />
-      <h3>Add a New FAQ</h3>
-      <input type="text" id="faq-question" placeholder="Enter question" />
-      <textarea id="faq-answer" placeholder="Enter answer with steps separated by new lines"></textarea>
-      <button onclick="addFAQ()" class="btn-logout" id="faq-submit">Add FAQ</button>
+      <div id="faq-admin-section">
+        <h3>Add / Edit FAQ</h3>
+        <input type="text" id="faq-question" placeholder="Enter question" />
+        <textarea id="faq-answer" placeholder="Enter answer with steps separated by new lines"></textarea>
+        <button onclick="addOrUpdateFAQ()" class="btn-logout" id="faq-submit">Add FAQ</button>
+      </div>
     </div>
     <button class="btn-logout" onclick="logout()">Logout</button>
   </section>
+
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBrR3TxIeKfaiF8wWQ4NOyQhmNwvbcczdw",
@@ -252,16 +133,15 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+
     let editingId = null;
     let userRole = "guest";
-    const form = document.getElementById('login-form');
-    const message = document.getElementById('login-message');
 
-    form.addEventListener('submit', function (e) {
+    document.getElementById('login-form').addEventListener('submit', function(e) {
       e.preventDefault();
       const user = document.getElementById('username').value;
       const pass = document.getElementById('password').value;
-      if (user === 'admin' && pass === 'Konnect@123') {
+      if(user === "admin" && pass === "Konnect@123") {
         userRole = "admin";
         document.getElementById('dashboard-welcome').textContent = "Welcome, Admin";
         document.getElementById('user-email').textContent = "it@konnectbpo.com";
@@ -280,99 +160,77 @@
       document.getElementById('dashboard').style.display = 'block';
       initCharts();
       loadFAQs();
-      if (userRole !== "admin") {
-        document.getElementById('faq-question').style.display = 'none';
-        document.getElementById('faq-answer').style.display = 'none';
-        document.getElementById('faq-submit').style.display = 'none';
+      if(userRole !== "admin") {
+        document.getElementById('faq-admin-section').style.display = 'none';
         document.getElementById('faq-heading').textContent = "Knowledge Portal - FAQs (Read Only)";
       }
     });
+
     function logout() { location.reload(); }
+
     function initCharts() {
       new Chart(document.getElementById('projectsChart').getContext('2d'), {
         type: 'line',
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-          datasets: [{
-            label: 'Projects',
-            data: [3, 5, 7, 10, 9, 12],
-            backgroundColor: 'rgba(0, 87, 184, 0.2)',
-            borderColor: '#0057b8',
-            borderWidth: 2,
-            fill: true,
-            tension: 0.3
-          }]
-        },
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        data: { labels: ['Jan','Feb','Mar','Apr','May','Jun'], datasets:[{label:'Projects',data:[3,5,7,10,9,12],backgroundColor:'rgba(0,87,184,0.2)',borderColor:'#0057b8',borderWidth:2,fill:true,tension:0.3}] },
+        options: { responsive:true, scales:{ y:{ beginAtZero:true } } }
       });
       new Chart(document.getElementById('ticketsChart').getContext('2d'), {
         type: 'bar',
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-          datasets: [{
-            label: 'Support Tickets',
-            data: [5, 8, 6, 9, 7, 10],
-            backgroundColor: '#003d80'
-          }]
-        },
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        data: { labels: ['Jan','Feb','Mar','Apr','May','Jun'], datasets:[{label:'Support Tickets',data:[5,8,6,9,7,10],backgroundColor:'#003d80'}] },
+        options: { responsive:true, scales:{ y:{ beginAtZero:true } } }
       });
     }
-    async function addFAQ() {
-      if (userRole !== "admin") { alert("Only admin can add FAQs."); return; }
-      const question = document.getElementById('faq-question').value.trim();
-      const answer = document.getElementById('faq-answer').value.trim();
-      if (!question || !answer) { alert("Please fill both question and answer."); return; }
-      if (editingId) {
-        await db.collection('faqs').doc(editingId).set({ question, answer });
+
+    async function addOrUpdateFAQ() {
+      if(userRole !== "admin") { alert("Only admin can add FAQs."); return; }
+      const q = document.getElementById('faq-question').value.trim();
+      const a = document.getElementById('faq-answer').value.trim();
+      if(!q || !a) { alert("Fill both fields."); return; }
+      if(editingId) {
+        await db.collection('faqs').doc(editingId).set({ question:q, answer:a });
         editingId = null;
         document.getElementById('faq-submit').textContent = 'Add FAQ';
       } else {
-        await db.collection('faqs').add({ question, answer });
+        await db.collection('faqs').add({ question:q, answer:a });
       }
       document.getElementById('faq-question').value = '';
       document.getElementById('faq-answer').value = '';
       loadFAQs();
     }
+
     async function deleteFAQ(id) {
-      if (userRole !== "admin") { alert("Only admin can delete FAQs."); return; }
+      if(userRole !== "admin") { alert("Only admin can delete FAQs."); return; }
       await db.collection('faqs').doc(id).delete();
       loadFAQs();
     }
+
     async function editFAQ(id) {
-      if (userRole !== "admin") { alert("Only admin can edit FAQs."); return; }
+      if(userRole !== "admin") { alert("Only admin can edit FAQs."); return; }
       const doc = await db.collection('faqs').doc(id).get();
-      if (doc.exists) {
-        const data = doc.data();
-        document.getElementById('faq-question').value = data.question;
-        document.getElementById('faq-answer').value = data.answer;
+      if(doc.exists) {
+        document.getElementById('faq-question').value = doc.data().question;
+        document.getElementById('faq-answer').value = doc.data().answer;
         editingId = id;
         document.getElementById('faq-submit').textContent = 'Update FAQ';
       }
     }
+
     async function loadFAQs() {
-      const faqListDiv = document.getElementById('faq-list');
-      faqListDiv.innerHTML = '';
+      const list = document.getElementById('faq-list');
+      list.innerHTML = '';
       const snapshot = await db.collection('faqs').orderBy('question').get();
       snapshot.forEach(doc => {
-        const faq = doc.data();
+        const data = doc.data();
         const id = doc.id;
-        const card = document.createElement('div');
-        card.className = 'card';
-        const steps = faq.answer
-          .split('\n')
-          .filter(line => line.trim() !== '')
-          .map((step, i) => `
-            <div class="step-card"><strong>Step ${i + 1}</strong>${step.trim()}</div>
-          `).join('');
+        const div = document.createElement('div');
+        div.className = 'card';
+        let steps = data.answer.split('\n').map((s,i)=>`<div class="step-card"><strong>Step ${i+1}:</strong> ${s}</div>`).join('');
         let buttons = "";
-        if (userRole === "admin") {
-          buttons = `
-            <button class="edit" onclick="editFAQ('${id}')">Edit</button>
-            <button class="delete" onclick="deleteFAQ('${id}')">Delete</button>`;
+        if(userRole==="admin") {
+          buttons = `<button class="edit" onclick="editFAQ('${id}')">Edit</button><button class="delete" onclick="deleteFAQ('${id}')">Delete</button>`;
         }
-        card.innerHTML = `<h4>${faq.question}</h4>${steps}${buttons}`;
-        faqListDiv.appendChild(card);
+        div.innerHTML = `<h4>${data.question}</h4>${steps}${buttons}`;
+        list.appendChild(div);
       });
     }
   </script>
