@@ -111,8 +111,7 @@
     <div class="profile-box" style="margin-top: 40px;">
       <h2 id="faq-heading">Knowledge Portal - FAQs</h2>
       <div id="faq-list"></div>
-      <br />
-      <div id="faq-admin-section">
+      <div id="faq-admin-section" style="margin-top:20px;">
         <h3>Add / Edit FAQ</h3>
         <input type="text" id="faq-question" placeholder="Enter question" />
         <textarea id="faq-answer" placeholder="Enter answer with steps separated by new lines"></textarea>
@@ -148,9 +147,11 @@
         document.getElementById('user-role').textContent = "Manager";
       } else {
         userRole = "viewer";
-        document.getElementById('dashboard-welcome').textContent = "Welcome, Guest";
-        document.getElementById('user-email').textContent = user + "@konnectbpo.com";
+        document.getElementById('dashboard-welcome').textContent = `Welcome, ${user}`;
+        document.getElementById('user-email').textContent = `${user}@konnectbpo.com`;
         document.getElementById('user-role').textContent = "Viewer";
+        document.getElementById('faq-admin-section').style.display = "none";
+        document.getElementById('faq-heading').textContent = "Knowledge Portal - FAQs (Read Only)";
       }
       document.getElementById('login-section').style.display = 'none';
       document.getElementById('about').style.display = 'none';
@@ -160,10 +161,6 @@
       document.getElementById('dashboard').style.display = 'block';
       initCharts();
       loadFAQs();
-      if(userRole !== "admin") {
-        document.getElementById('faq-admin-section').style.display = 'none';
-        document.getElementById('faq-heading').textContent = "Knowledge Portal - FAQs (Read Only)";
-      }
     });
 
     function logout() { location.reload(); }
