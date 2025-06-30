@@ -58,6 +58,8 @@
     <a href="#services">Services</a>
     <a href="#contact">Contact</a>
   </nav>
+
+  <!-- Login -->
   <section id="login-section">
     <h2>Login</h2>
     <form id="login-form">
@@ -67,10 +69,14 @@
     </form>
     <p id="login-message"></p>
   </section>
+
+  <!-- About -->
   <section id="about">
     <h2>About Us</h2>
     <p>KonnectBPO helps businesses streamline operations with cost-effective outsourcing.</p>
   </section>
+
+  <!-- Services -->
   <section id="services">
     <h2>Our Services</h2>
     <div class="cards">
@@ -79,6 +85,8 @@
       <div class="card"><h3>Back Office</h3><p>Billing, processing, and admin services tailored to you.</p></div>
     </div>
   </section>
+
+  <!-- Contact -->
   <section id="contact">
     <h2>Contact Us</h2>
     <p>Email: info@konnectbpo.com</p>
@@ -87,17 +95,20 @@
   </section>
   <footer>&copy; 2025 KonnectBPO. All rights reserved.</footer>
 
+  <!-- Dashboard -->
   <section id="dashboard">
     <div class="profile-box">
       <h2 id="dashboard-welcome">Welcome</h2>
       <p><strong>Email:</strong> <span id="user-email">N/A</span></p>
       <p><strong>Role:</strong> <span id="user-role">N/A</span></p>
     </div>
+
     <div class="cards">
       <div class="card"><h3>Projects</h3><p>12 Ongoing</p></div>
       <div class="card"><h3>Clients</h3><p>58 Active</p></div>
       <div class="card"><h3>Support</h3><p>7 Open Tickets</p></div>
     </div>
+
     <div id="charts-wrapper">
       <div class="chart-box">
         <h3>Monthly Projects</h3>
@@ -108,6 +119,8 @@
         <canvas id="ticketsChart"></canvas>
       </div>
     </div>
+
+    <!-- FAQ -->
     <div class="profile-box" style="margin-top: 40px;">
       <h2 id="faq-heading">Knowledge Portal - FAQs</h2>
       <div id="faq-list"></div>
@@ -118,6 +131,7 @@
         <button onclick="addOrUpdateFAQ()" class="btn-logout" id="faq-submit">Add FAQ</button>
       </div>
     </div>
+
     <button class="btn-logout" onclick="logout()">Logout</button>
   </section>
 
@@ -136,7 +150,7 @@
     let editingId = null;
     let userRole = "guest";
 
-    document.getElementById('login-form').addEventListener('submit', function(e) {
+    document.getElementById('login-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       const user = document.getElementById('username').value;
       const pass = document.getElementById('password').value;
@@ -145,6 +159,7 @@
         document.getElementById('dashboard-welcome').textContent = "Welcome, Admin";
         document.getElementById('user-email').textContent = "it@konnectbpo.com";
         document.getElementById('user-role').textContent = "Manager";
+        document.getElementById('faq-admin-section').style.display = "block";
       } else {
         userRole = "viewer";
         document.getElementById('dashboard-welcome').textContent = `Welcome, ${user}`;
@@ -160,7 +175,7 @@
       document.querySelector('footer').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
       initCharts();
-      loadFAQs();
+      await loadFAQs();
     });
 
     function logout() { location.reload(); }
@@ -183,52 +198,72 @@
       const q = document.getElementById('faq-question').value.trim();
       const a = document.getElementById('faq-answer').value.trim();
       if(!q || !a) { alert("Fill both fields."); return; }
-      if(editingId) {
-        await db.collection('faqs').doc(editingId).set({ question:q, answer:a });
-        editingId = null;
-        document.getElementById('faq-submit').textContent = 'Add FAQ';
-      } else {
-        await db.collection('faqs').add({ question:q, answer:a });
+      try {
+        if(editingId) {
+          await db.collection('faqs').doc(editingId).set({ question:q, answer:a });
+          editingId = null;
+          document.getElementById('faq-submit').textContent = 'Add FAQ';
+        } else {
+          await db.collection('faqs').add({ question:q, answer:a });
+        }
+        document.getElementById('faq-question').value = '';
+        document.getElementById('faq-answer').value = '';
+        await loadFAQs();
+      } catch (e) {
+        console.error("Error saving FAQ: ", e);
+        alert("Could not save FAQ. Check console for details.");
       }
-      document.getElementById('faq-question').value = '';
-      document.getElementById('faq-answer').value = '';
-      loadFAQs();
     }
 
     async function deleteFAQ(id) {
       if(userRole !== "admin") { alert("Only admin can delete FAQs."); return; }
-      await db.collection('faqs').doc(id).delete();
-      loadFAQs();
+      try {
+        await db.collection('faqs').doc(id).delete();
+        await loadFAQs();
+      } catch (e) {
+        console.error("Error deleting FAQ: ", e);
+        alert("Could not delete FAQ. Check console for details.");
+      }
     }
 
     async function editFAQ(id) {
       if(userRole !== "admin") { alert("Only admin can edit FAQs."); return; }
-      const doc = await db.collection('faqs').doc(id).get();
-      if(doc.exists) {
-        document.getElementById('faq-question').value = doc.data().question;
-        document.getElementById('faq-answer').value = doc.data().answer;
-        editingId = id;
-        document.getElementById('faq-submit').textContent = 'Update FAQ';
+      try {
+        const doc = await db.collection('faqs').doc(id).get();
+        if(doc.exists) {
+          document.getElementById('faq-question').value = doc.data().question;
+          document.getElementById('faq-answer').value = doc.data().answer;
+          editingId = id;
+          document.getElementById('faq-submit').textContent = 'Update FAQ';
+        }
+      } catch (e) {
+        console.error("Error editing FAQ: ", e);
+        alert("Could not load FAQ for editing. Check console.");
       }
     }
 
     async function loadFAQs() {
       const list = document.getElementById('faq-list');
       list.innerHTML = '';
-      const snapshot = await db.collection('faqs').orderBy('question').get();
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const id = doc.id;
-        const div = document.createElement('div');
-        div.className = 'card';
-        let steps = data.answer.split('\n').map((s,i)=>`<div class="step-card"><strong>Step ${i+1}:</strong> ${s}</div>`).join('');
-        let buttons = "";
-        if(userRole==="admin") {
-          buttons = `<button class="edit" onclick="editFAQ('${id}')">Edit</button><button class="delete" onclick="deleteFAQ('${id}')">Delete</button>`;
-        }
-        div.innerHTML = `<h4>${data.question}</h4>${steps}${buttons}`;
-        list.appendChild(div);
-      });
+      try {
+        const snapshot = await db.collection('faqs').orderBy('question').get();
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const id = doc.id;
+          const div = document.createElement('div');
+          div.className = 'card';
+          let steps = data.answer.split('\n').map((s,i)=>`<div class="step-card"><strong>Step ${i+1}:</strong> ${s}</div>`).join('');
+          let buttons = "";
+          if(userRole==="admin") {
+            buttons = `<button class="edit" onclick="editFAQ('${id}')">Edit</button><button class="delete" onclick="deleteFAQ('${id}')">Delete</button>`;
+          }
+          div.innerHTML = `<h4>${data.question}</h4>${steps}${buttons}`;
+          list.appendChild(div);
+        });
+      } catch (e) {
+        console.error("Error loading FAQs: ", e);
+        alert("Could not load FAQs. Check console.");
+      }
     }
   </script>
 </body>
