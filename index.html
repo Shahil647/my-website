@@ -141,12 +141,19 @@
       const user = document.getElementById('username').value.trim();
       const pass = document.getElementById('password').value.trim();
 
-      if(user === "admin" && pass === "Konnect@123") {
+      if (user === "admin" && pass === "Konnect@123") {
         userRole = "admin";
         document.getElementById('dashboard-welcome').textContent = "Welcome, Admin";
         document.getElementById('user-email').textContent = "it@konnectbpo.com";
         document.getElementById('user-role').textContent = "Manager";
         document.getElementById('faq-admin-section').style.display = "block";
+      } else if (user === "viewer" && pass === "Viewer@123") {
+        userRole = "viewer";
+        document.getElementById('dashboard-welcome').textContent = "Welcome, Viewer";
+        document.getElementById('user-email').textContent = "viewer@konnectbpo.com";
+        document.getElementById('user-role').textContent = "Viewer";
+        document.getElementById('faq-admin-section').style.display = "none";
+        document.getElementById('faq-heading').textContent = "Knowledge Portal - FAQs (Read Only)";
       } else {
         document.getElementById('login-message').textContent = "Invalid username or password.";
         return;
